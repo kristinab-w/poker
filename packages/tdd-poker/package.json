@@ -1,0 +1,65 @@
+{
+  "name": "@wix/tdd-poker",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "author": {
+    "name": "kristinab-w",
+    "email": "kristinab@wix.com"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "sideEffects": false,
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist/cjs",
+    "dist/esm",
+    "dist/types"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.dev.wixpress.com/",
+    "versionBumpStrategy": "minor"
+  },
+  "scripts": {
+    "build": "yoshi-library build",
+    "start": "yoshi-library start",
+    "test": "yoshi-library test",
+    "lint": "yoshi-library lint"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "yarn lint"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.0",
+    "@types/node": "^16.0.0",
+    "@wix/jest-yoshi-preset": "^6.0.0",
+    "@wix/yoshi-flow-library": "^6.0.0",
+    "ts-jest": "^27.1.2",
+    "typescript": "~4.6.0"
+  },
+  "jest": {
+    "preset": "@wix/jest-yoshi-preset"
+  },
+  "yoshiFlowLibrary": {
+    "buildEsmWithBabel": true
+  },
+  "eslintConfig": {
+    "extends": "@wix/eslint-config-yoshi"
+  },
+  "wix": {
+    "artifact": {
+      "groupId": "com.wixpress",
+      "artifactId": "tdd-poker"
+    },
+    "validations": {
+      "postDependenciesBuild": [
+        "lint"
+      ]
+    }
+  },
+  "wallaby": {
+    "autoDetect": true
+  }
+}
