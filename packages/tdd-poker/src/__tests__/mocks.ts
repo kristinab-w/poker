@@ -1,6 +1,6 @@
 import { Card, CardSuit } from '../types';
 
-export const cardsForValueSorting: Card[] = [
+export const cards: Card[] = [
   {
     value: 'A',
     suit: 'S',
@@ -46,37 +46,14 @@ export const sortedCards: Card[] = [
   },
 ];
 
-export const cardsForGrouping: Card[] = [
-  {
-    value: '2',
-    suit: 'S',
-  },
-  {
-    value: '2',
-    suit: 'D',
-  },
-  {
-    value: '6',
-    suit: 'D',
-  },
-  {
-    value: 'T',
-    suit: 'D',
-  },
-  {
-    value: 'A',
-    suit: 'S',
-  },
-];
-
 export const groupedCards: Record<CardSuit, Card[]> = {
   S: [
     {
-      value: '2',
+      value: 'A',
       suit: 'S',
     },
     {
-      value: 'A',
+      value: '2',
       suit: 'S',
     },
   ],
@@ -86,11 +63,11 @@ export const groupedCards: Record<CardSuit, Card[]> = {
       suit: 'D',
     },
     {
-      value: '6',
+      value: 'T',
       suit: 'D',
     },
     {
-      value: 'T',
+      value: '6',
       suit: 'D',
     },
   ],

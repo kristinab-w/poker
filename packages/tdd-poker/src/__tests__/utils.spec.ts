@@ -1,24 +1,17 @@
 import { sortByValue, groupSuits } from '../utils';
-import {
-  cardsForGrouping,
-  cardsForValueSorting,
-  sortedCards,
-  groupedCards,
-} from './mocks';
+import { cards, sortedCards, groupedCards } from './mocks';
 
 describe('utils', () => {
-  const invalidCards = ['AS', '2S', '2D', 'TD', 'PP'];
-
   describe('sortByValue', () => {
     it('should sort correctly', () => {
-      const result = sortByValue(cardsForValueSorting);
+      const result = sortByValue(cards);
       expect(result).toEqual(sortedCards);
     });
   });
 
   describe('groupSuits', () => {
     it('should group successfully', () => {
-      const result = groupSuits(cardsForGrouping);
+      const result = groupSuits(cards);
       expect(result).toEqual(groupedCards);
     });
   });

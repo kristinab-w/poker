@@ -2,7 +2,7 @@ import { valueRank } from './constants';
 import { Card, CardSuit } from './types';
 
 export const sortByValue = (cardList: Card[]) => {
-  return cardList.sort((a, b) => {
+  return [...cardList].sort((a, b) => {
     const aa = a.value;
     const bb = b.value;
     if (aa === bb) {
