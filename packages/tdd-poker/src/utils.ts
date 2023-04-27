@@ -1,4 +1,4 @@
-import { valueRank } from './constants';
+import { values } from './constants';
 import { Card, CardSuit } from './types';
 
 export const sortByValue = (cardList: Card[]) => {
@@ -8,8 +8,8 @@ export const sortByValue = (cardList: Card[]) => {
     if (aa === bb) {
       return 0;
     }
-    const indexA = valueRank.findIndex((val) => val === aa);
-    const indexB = valueRank.findIndex((val) => val === bb);
+    const indexA = values.findIndex((val) => val === aa);
+    const indexB = values.findIndex((val) => val === bb);
     if (indexA > indexB) {
       return 1;
     }
@@ -42,6 +42,7 @@ export const stringToCardList = (hand: string): Card[] => {
   if (list.length !== 5) {
     throw new Error('Invalid card number in hand.');
   }
+  // find if any dublicates
 
   return list.map((item) => {
     const value = item.charAt(0);

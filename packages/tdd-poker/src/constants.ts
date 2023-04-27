@@ -1,4 +1,6 @@
-export const valueRank = [
+import { CardSuit, CardValue } from './types';
+
+export const values: CardValue[] = [
   '2',
   '3',
   '4',
@@ -13,4 +15,4 @@ export const valueRank = [
   'K',
   'A',
 ];
-export const suits = ['S', 'H', 'D', 'C'];
+export const suits: CardSuit[] = ['S', 'H', 'D', 'C'];
