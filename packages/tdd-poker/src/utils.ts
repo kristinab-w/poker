@@ -43,7 +43,10 @@ export const stringToCardList = (hand: string): Card[] => {
     throw new Error('Invalid card number in hand.');
   }
   // find if any dublicates
+  return stringArrToCardList(list);
+};
 
+export const stringArrToCardList = (list: string[]) => {
   return list.map((item) => {
     const value = item.charAt(0);
     const suit = item.charAt(1);

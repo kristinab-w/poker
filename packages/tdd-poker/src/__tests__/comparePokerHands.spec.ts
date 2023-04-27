@@ -1,5 +1,5 @@
-// import jest from 'jest';
-// import comparePokerHands from '../index';
+import comparePokerHands, { removeAllDublicates } from '../index';
+import { Card } from '../types';
 
 type TestCase = {
   hands: string[];
@@ -73,10 +73,17 @@ const testCaseList: TestCase[] = [
   },
 ];
 
+const cases: TestCase[] = [
+  {
+    hands: ['2S AH 4H 5S 6C', 'AD 4C 5H 6H 2C'], // FIXME: -1
+    result: 0,
+  },
+];
+
 describe('comparePokerHands', () => {
-  // it.each(testCaseList)('testcase %o', ( tc: TestCase) => {
-  //   const {hands, result} = tc;
-  //   const retrievedResult = comparePokerHands(hands);
-  //   expect(retrievedResult).toBe(result);
-  // });
+  it.each(testCaseList)('testcase %o', (tc: TestCase) => {
+    const { hands, result } = tc;
+    const retrievedResult = comparePokerHands(hands);
+    expect(retrievedResult).toBe(result);
+  });
 });
