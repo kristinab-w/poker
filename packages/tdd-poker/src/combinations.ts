@@ -2,24 +2,36 @@ import { suits, values } from './constants';
 import { Card, CardSuit, CardValue, Rank } from './types';
 import { groupSuits, sortByValue } from './utils';
 
-export const findPairs = (cardsSortedByValue: Card[]): Card[][] => {
-  let pairs: Card[][] = [];
+export const findGroupsWithTheSameValue = (
+  cardsSortedByValue: Card[],
+): Card[][] => {
+  let uniqueCardValues: CardValue[] = [];
 
-  for (let i = 0; i < cardsSortedByValue.length - 1; i++) {
-    const card = cardsSortedByValue[0];
-
-    for (let j = i + 1; j < cardsSortedByValue.length; j++) {
-      const nextCard = cardsSortedByValue[j];
-
-      if (card.value === nextCard.value) {
-        pairs = [...pairs, [card, nextCard]];
-        i = j;
-        break;
+  for (const card of cardsSortedByValue) {
+    if (!uniqueCardValues.length) {
+      uniqueCardValues = [card.value];
+    } else {
+      let found = false;
+      for (const cardValue of uniqueCardValues) {
+        if (cardValue === card.value) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        uniqueCardValues = [...uniqueCardValues, card.value];
       }
     }
   }
+  let groups: Card[][] = [];
+  for (const uniqueCardValue of uniqueCardValues) {
+    const group = cardsSortedByValue.filter(
+      (card) => card.value === uniqueCardValue,
+    );
+    groups = [...groups, group];
+  }
 
-  return pairs;
+  return groups;
 };
 
 const isNumberOfAKind =
@@ -47,13 +59,13 @@ const isStaightFlush = (
 
 // Four cards of the same value
 const hasFourSameValueCards = (cards: Card[]) => {
-  const pairs = findPairs(cards);
+  const pairs = findGroupsWithTheSameValue(cards);
   return pairs.length === 4;
 };
 
 // Combination of three of a kind and a pair
 const isFullHouse = (cards: Card[]) => {
-  const pairs = findPairs(cards);
+  const pairs = findGroupsWithTheSameValue(cards);
   if (pairs.length !== 2) {
     return false;
   } else if (pairs[0].length === 2 && pairs[1].length === 3) {
@@ -106,13 +118,13 @@ const isStraight = (cardsSortedByValue: Card[]) => {
 
 // Three cards with the same value
 const isThreeOfaKind = (cards: Card[]) => {
-  const pairs = findPairs(cards);
+  const pairs = findGroupsWithTheSameValue(cards);
   return pairs.length === 3;
 };
 
 // Two times two cards with the same value
 const isTwoPairs = (cards: Card[]) => {
-  const pairs = findPairs(cards);
+  const pairs = findGroupsWithTheSameValue(cards);
   return pairs.length === 2;
 };
 
