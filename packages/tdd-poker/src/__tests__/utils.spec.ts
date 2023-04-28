@@ -25,15 +25,13 @@ describe('utils', () => {
 
   describe('stringToCardList', () => {
     it('should convert hand to card list correctly', () => {
-      const hand = 'AS 2S 2D TD 6D';
-      const result = stringToCardList(hand);
+      const result = stringToCardList('AS 2S 2D TD 6D');
       expect(result).toEqual(cards);
     });
 
     it('should throw error when card is invalid', () => {
       try {
-        const handWithInvalidCard = 'AS 2S 2D PP 6D';
-        stringToCardList(handWithInvalidCard);
+        stringToCardList('AS 2S 2D PP 6D');
       } catch (e) {
         expect(e.message).toBe('Invalid card format.');
       }
@@ -41,8 +39,7 @@ describe('utils', () => {
 
     it('should throw error when card number is invalid', () => {
       try {
-        const handWithInvalidCardNumber = 'AS 2S 2D 6D';
-        stringToCardList(handWithInvalidCardNumber);
+        stringToCardList('AS 2S 2D 6D');
       } catch (e) {
         expect(e.message).toBe('Invalid card number in hand.');
       }
@@ -51,16 +48,13 @@ describe('utils', () => {
 
   describe('stringArrToCardList', () => {
     it('should convert hand list to card list correctly', () => {
-      const hand = ['AS', '2S', '2D', 'TD', '6D'];
-
-      const result = stringArrToCardList(hand);
+      const result = stringArrToCardList(['AS', '2S', '2D', 'TD', '6D']);
       expect(result).toEqual(cards);
     });
 
     it('should throw error when card is invalid', () => {
       try {
-        const handWithInvalidCard = ['AS', '2S', '2D', 'PP', '6D'];
-        stringArrToCardList(handWithInvalidCard);
+        stringArrToCardList(['AS', '2S', '2D', 'PP', '6D']);
       } catch (e) {
         expect(e.message).toBe('Invalid card format.');
       }
