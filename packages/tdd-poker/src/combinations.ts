@@ -108,6 +108,9 @@ const findRank = (cardsInHand: Card[]): Rank => {
   if (isStraight(cardsSortedByValue)) {
     return Rank.STRAIGHT;
   }
+  if (isFlush(cardsSortedBySuit)) {
+    return Rank.FLUSH;
+  }
   if (isThreeOfaKind(sortedGroupsByLength)) {
     return Rank.THREE_OF_KIND;
   }
@@ -117,9 +120,7 @@ const findRank = (cardsInHand: Card[]): Rank => {
   if (isPair(sortedGroupsByLength)) {
     return Rank.PAIR;
   }
-  if (isFlush(cardsSortedBySuit)) {
-    return Rank.FLUSH;
-  }
+
   return Rank.HIGH_CARD;
 };
 
