@@ -1,12 +1,35 @@
-import comparePokerHands, { removeAllDublicates } from '../index';
-import { Card } from '../types';
+import { TestCase } from '../test-types';
+import { Card, CardSuit } from '../types';
 
-type TestCase = {
-  hands: string[];
-  result: -1 | 0 | 1;
-};
+export const cards: Card[] = [
+  { value: 'A', suit: 'S' },
+  { value: '2', suit: 'S' },
+  { value: '2', suit: 'D' },
+  { value: 'T', suit: 'D' },
+  { value: '6', suit: 'D' },
+];
 
-const testCaseList: TestCase[] = [
+export const sortedCards: Card[] = [
+  { value: '2', suit: 'S' },
+  { value: '2', suit: 'D' },
+  { value: '6', suit: 'D' },
+  { value: 'T', suit: 'D' },
+  { value: 'A', suit: 'S' },
+];
+
+export const groupedCards: Record<CardSuit, Card[]> = {
+  S: [
+    { value: 'A', suit: 'S' },
+    { value: '2', suit: 'S' },
+  ],
+  D: [
+    { value: '2', suit: 'D' },
+    { value: 'T', suit: 'D' },
+    { value: '6', suit: 'D' },
+  ],
+} as Record<CardSuit, Card[]>;
+
+export const testCaseList: TestCase[] = [
   {
     hands: ['2H 3H 4H 5H 6H', 'KS AS TS QS JS'],
     result: -1,
@@ -72,18 +95,3 @@ const testCaseList: TestCase[] = [
     result: 0,
   },
 ];
-
-const cases: TestCase[] = [
-  {
-    hands: ['2S AH 4H 5S 6C', 'AD 4C 5H 6H 2C'], // FIXME: -1
-    result: 0,
-  },
-];
-
-describe('comparePokerHands', () => {
-  it.each(testCaseList)('testcase %o', (tc: TestCase) => {
-    const { hands, result } = tc;
-    const retrievedResult = comparePokerHands(hands);
-    expect(retrievedResult).toBe(result);
-  });
-});

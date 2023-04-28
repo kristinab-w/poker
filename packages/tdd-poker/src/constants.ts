@@ -1,6 +1,6 @@
-import { CardSuit, CardValue } from './types';
+import { CardSuit, CardValue, Rank } from './types';
 
-export const values: CardValue[] = [
+export const VALUE_LIST: CardValue[] = [
   '2',
   '3',
   '4',
@@ -15,4 +15,13 @@ export const values: CardValue[] = [
   'K',
   'A',
 ];
-export const suits: CardSuit[] = ['S', 'H', 'D', 'C'];
+export const SUIT_LIST: CardSuit[] = ['S', 'H', 'D', 'C'];
+
+export const RANKS_REQUIRE_HIGH_CARD_CHECK = [
+  Rank.HIGH_CARD,
+  Rank.PAIR,
+  Rank.TWO_PAIRS,
+  Rank.FLUSH,
+  Rank.FOUR_OF_KIND,
+  Rank.STRAIGHT_FLUSH,
+];

@@ -1,69 +1,28 @@
-import { findGroupsWithTheSameValue } from '../combinations';
 import { Card } from '../types';
+import { comparatorForTwoHands } from '../comparator';
+import { testCaseList } from './test-constants';
+import { TestCase } from '../test-types';
+import { getHighestCard } from '../combinations';
 
 describe('combinations', () => {
-  describe('findPairs', () => {
-    it('should find pair', () => {
-      const sortedCards: Card[] = [
-        {
-          value: '2',
-          suit: 'S',
-        },
-        {
-          value: '6',
-          suit: 'D',
-        },
-        {
-          value: 'T',
-          suit: 'D',
-        },
-        {
-          value: 'A',
-          suit: 'S',
-        },
-        {
-          value: '2',
-          suit: 'D',
-        },
-      ];
-
-      const expectedPairs: Card[][] = [
-        [
-          {
-            value: '2',
-            suit: 'S',
-          },
-          {
-            value: '2',
-            suit: 'D',
-          },
-        ],
-      ];
-      const pairs = findGroupsWithTheSameValue(sortedCards);
-      expect(pairs).toEqual(expectedPairs);
+  describe('comparatorForTwoHands', () => {
+    it.each(testCaseList)('testcase %o', (tc: TestCase) => {
+      const { hands, result } = tc;
+      const retrievedResult = comparatorForTwoHands(hands);
+      expect(retrievedResult).toBe(result);
     });
-    it('should find 2 groups', () => {
+  });
+  describe('getHighestCard', () => {
+    it('should find highest card', () => {
       const sortedCards: Card[] = [
         { value: '2', suit: 'S' },
-        { value: '2', suit: 'H' },
-        { value: 'A', suit: 'H' },
+        { value: '2', suit: 'D' },
+        { value: '6', suit: 'D' },
+        { value: 'T', suit: 'D' },
         { value: 'A', suit: 'S' },
-        { value: 'A', suit: 'C' },
       ];
-
-      const expectedGroups: Card[][] = [
-        [
-          { value: '2', suit: 'S' },
-          { value: '2', suit: 'H' },
-        ],
-        [
-          { value: 'A', suit: 'H' },
-          { value: 'A', suit: 'S' },
-          { value: 'A', suit: 'C' },
-        ],
-      ];
-      const pairs = findGroupsWithTheSameValue(sortedCards);
-      expect(pairs).toEqual(expectedGroups);
+      const highCard = getHighestCard(sortedCards);
+      expect(highCard).toEqual(sortedCards[sortedCards.length - 1]);
     });
   });
 });

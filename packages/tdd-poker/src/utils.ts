@@ -1,5 +1,5 @@
-import { values } from './constants';
-import { Card, CardSuit } from './types';
+import { VALUE_LIST } from './constants';
+import { Card, CardSuit, CardValue } from './types';
 
 export const sortByValue = (cardList: Card[]) => {
   return [...cardList].sort((a, b) => {
@@ -8,8 +8,8 @@ export const sortByValue = (cardList: Card[]) => {
     if (aa === bb) {
       return 0;
     }
-    const indexA = values.findIndex((val) => val === aa);
-    const indexB = values.findIndex((val) => val === bb);
+    const indexA = VALUE_LIST.findIndex((val) => val === aa);
+    const indexB = VALUE_LIST.findIndex((val) => val === bb);
     if (indexA > indexB) {
       return 1;
     }
@@ -42,11 +42,11 @@ export const stringToCardList = (hand: string): Card[] => {
   if (list.length !== 5) {
     throw new Error('Invalid card number in hand.');
   }
-  // find if any dublicates
+
   return stringArrToCardList(list);
 };
 
-export const stringArrToCardList = (list: string[]) => {
+export const stringArrToCardList = (list: string[]): Card[] => {
   return list.map((item) => {
     const value = item.charAt(0);
     const suit = item.charAt(1);
@@ -58,4 +58,36 @@ export const stringArrToCardList = (list: string[]) => {
 
     return card;
   });
+};
+
+export const findGroupsWithTheSameValue = (
+  cardsSortedByValue: Card[],
+): Card[][] => {
+  let uniqueCardValues: CardValue[] = [];
+
+  for (const card of cardsSortedByValue) {
+    if (!uniqueCardValues.length) {
+      uniqueCardValues = [card.value];
+    } else {
+      let found = false;
+      for (const cardValue of uniqueCardValues) {
+        if (cardValue === card.value) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        uniqueCardValues = [...uniqueCardValues, card.value];
+      }
+    }
+  }
+  let groups: Card[][] = [];
+  for (const uniqueCardValue of uniqueCardValues) {
+    const group = cardsSortedByValue.filter(
+      (card) => card.value === uniqueCardValue,
+    );
+    groups = [...groups, group];
+  }
+
+  return groups;
 };

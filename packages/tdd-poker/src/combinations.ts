@@ -1,112 +1,71 @@
-import { suits, values } from './constants';
-import { Card, CardSuit, CardValue, Rank } from './types';
-import { groupSuits, sortByValue } from './utils';
+import { VALUE_LIST } from './constants';
+import { Card, CardSuit, Rank } from './types';
+import { findGroupsWithTheSameValue, groupSuits, sortByValue } from './utils';
 
-export const findGroupsWithTheSameValue = (
-  cardsSortedByValue: Card[],
-): Card[][] => {
-  let uniqueCardValues: CardValue[] = [];
-
-  for (const card of cardsSortedByValue) {
-    if (!uniqueCardValues.length) {
-      uniqueCardValues = [card.value];
-    } else {
-      let found = false;
-      for (const cardValue of uniqueCardValues) {
-        if (cardValue === card.value) {
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
-        uniqueCardValues = [...uniqueCardValues, card.value];
-      }
+const isNumberOfAKind = (
+  sortedAndGroupedHand: Record<CardSuit, Card[]>,
+  numberOfCards: number,
+) => {
+  const cardGroups = Object.entries(sortedAndGroupedHand);
+  let suit;
+  for (const [key, list] of cardGroups) {
+    if (list.length === numberOfCards) {
+      suit = key;
     }
   }
-  let groups: Card[][] = [];
-  for (const uniqueCardValue of uniqueCardValues) {
-    const group = cardsSortedByValue.filter(
-      (card) => card.value === uniqueCardValue,
-    );
-    groups = [...groups, group];
-  }
-
-  return groups;
+  return !!suit;
 };
 
-const isNumberOfAKind =
-  (sortedAndGroupedHand: Record<CardSuit, Card[]>) =>
-  (numberOfCards: number) => {
-    const cardGroups = Object.entries(sortedAndGroupedHand);
-    let suit;
-    for (const [key, list] of cardGroups) {
-      if (list.length === numberOfCards) {
-        suit = key;
-      }
-    }
-    return !!suit;
-  };
-
-// same suit + straight
 const isStaightFlush = (
   cardsSortedByValue: Card[],
   cardsSortedBySuit: Record<CardSuit, Card[]>,
 ) => {
-  const isSameSuit = isNumberOfAKind(cardsSortedBySuit)(5);
+  const isSameSuit = isFlush(cardsSortedBySuit);
   const hasStraightCombination = isStraight(cardsSortedByValue);
   return isSameSuit && hasStraightCombination;
 };
 
-// Four cards of the same value
-const hasFourSameValueCards = (cards: Card[]) => {
-  const pairs = findGroupsWithTheSameValue(cards);
-  return pairs.length === 4;
+const hasFourSameValueCards = (sortedGroups: Card[][]) => {
+  if (sortedGroups.length > 2) {
+    return false;
+  }
+  return sortedGroups[0].length === 4 || sortedGroups[1].length === 4;
 };
 
-// Combination of three of a kind and a pair
-const isFullHouse = (cards: Card[]) => {
-  const pairs = findGroupsWithTheSameValue(cards);
-  if (pairs.length !== 2) {
+const isFullHouse = (sortedGroups: Card[][]) => {
+  if (sortedGroups.length < 2) {
     return false;
-  } else if (pairs[0].length === 2 && pairs[1].length === 3) {
+  } else if (sortedGroups[0].length === 2 && sortedGroups[1].length === 3) {
     return true;
-  } else if (pairs[0].length === 3 && pairs[1].length === 2) {
+  } else if (sortedGroups[0].length === 3 && sortedGroups[1].length === 2) {
     return true;
   } else {
     return false;
   }
 };
 
-// 5 cards of the same suit
-const isFlush = (cardsSortedBySuit: Record<CardSuit, Card[]>) => {
-  for (const suit of suits) {
-    if (cardsSortedBySuit[suit] && cardsSortedBySuit[suit].length === 5) {
-      return true;
-    }
-  }
-  return false;
-};
+const isFlush = (cardsSortedBySuit: Record<CardSuit, Card[]>) =>
+  isNumberOfAKind(cardsSortedBySuit, 5);
 
-// Sequence of 5 cards in increasing value (Ace can precede 2 and follow up King)
 const isStraight = (cardsSortedByValue: Card[]) => {
   const first = cardsSortedByValue[0];
-  const start = values.findIndex((el) => el === first.value);
+  const start = VALUE_LIST.findIndex((el) => el === first.value);
   if (start === -1) {
     return false;
   }
   // handle A as starting point
   let timesMatchesPlace = 0;
-  if (start === values.length - 1) {
+  if (start === VALUE_LIST.length - 1) {
     timesMatchesPlace = 1;
     for (let i = 1; i < 5; i++) {
-      if (cardsSortedByValue[i].value === values[i - 1]) {
+      if (cardsSortedByValue[i].value === VALUE_LIST[i - 1]) {
         timesMatchesPlace += 1;
       }
     }
   }
 
   for (let i = 0; i < 5; i++) {
-    if (cardsSortedByValue[i].value === values[start + i]) {
+    if (cardsSortedByValue[i].value === VALUE_LIST[start + i]) {
       timesMatchesPlace += 1;
     }
   }
@@ -116,86 +75,50 @@ const isStraight = (cardsSortedByValue: Card[]) => {
   return false;
 };
 
-// Three cards with the same value
-const isThreeOfaKind = (cards: Card[]) => {
-  const pairs = findGroupsWithTheSameValue(cards);
-  return pairs.length === 3;
-};
+const isThreeOfaKind = (sortedGroups: Card[][]) => sortedGroups[0].length === 3;
 
-// Two times two cards with the same value
-const isTwoPairs = (cards: Card[]) => {
-  const pairs = findGroupsWithTheSameValue(cards);
-  return pairs.length === 2;
-};
+const isTwoPairs = (sortedGroups: Card[][]) =>
+  sortedGroups[0].length === 2 && sortedGroups[1].length === 2;
 
-// Simple value of the card. Lowest: 2 – Highest: Ace (King in the example)
-const getHighestCard = (cardsSortedByValue: Card[]) => {
-  return cardsSortedByValue[cardsSortedByValue.length - 1];
-};
+const isPair = (sortedGroups: Card[][]) =>
+  sortedGroups[0].length === 2 && sortedGroups[1].length === 1;
 
-const getHighestSameValueCardList = (cards: Card[]): Card[] => {
-  const cardsSortedByValue = sortByValue(cards);
-  const valuesSorted = {} as Record<CardValue, Card[]>;
-
-  for (const card of cardsSortedByValue) {
-    const { value, suit: _suit } = card;
-
-    if (valuesSorted[value]) {
-      valuesSorted[value] = [...valuesSorted[value], card];
-    } else {
-      valuesSorted[value] = [card];
-    }
-  }
-
-  let highestLengthCardList: Card[] = [];
-  for (const value of values) {
-    if (
-      valuesSorted[value] &&
-      valuesSorted[value].length > highestLengthCardList.length
-    ) {
-      highestLengthCardList = valuesSorted[value];
-    }
-  }
-
-  return highestLengthCardList;
-};
-
-const getHighestSameSuitCardList = (cardsInHand: Card[]): Card[] => {
-  const cardsSortedBySuit = groupSuits(cardsInHand);
-  const cardGroups = Object.entries(cardsSortedBySuit);
-
-  let highestLengthCardList: Card[] = [];
-  for (const [_key, list] of cardGroups) {
-    if (list.length > highestLengthCardList.length) {
-      highestLengthCardList = list;
-    }
-  }
-  return highestLengthCardList;
-};
+const getHighestCard = (cardsSortedByValue: Card[]) =>
+  cardsSortedByValue[cardsSortedByValue.length - 1];
 
 const findRank = (cardsInHand: Card[]): Rank => {
-  // highest number of the same value cards
-  // highest number of the same suit cards
-  // highest card
   const cardsSortedByValue = sortByValue(cardsInHand);
   const cardsSortedBySuit = groupSuits(cardsInHand);
 
   if (isStaightFlush(cardsSortedByValue, cardsSortedBySuit)) {
     return Rank.STRAIGHT_FLUSH;
-  } else if (hasFourSameValueCards(cardsSortedByValue)) {
+  }
+
+  const groupsOfSameValue = findGroupsWithTheSameValue(cardsSortedByValue);
+  const sortedGroupsByLength = groupsOfSameValue.sort(
+    (group1, group2) => group2.length - group1.length,
+  );
+
+  if (hasFourSameValueCards(sortedGroupsByLength)) {
     return Rank.FOUR_OF_KIND;
-  } else if (isFullHouse(cardsSortedByValue)) {
+  }
+  if (isFullHouse(sortedGroupsByLength)) {
     return Rank.FULL_HOUSE;
-  } else if (isFlush(cardsSortedBySuit)) {
-    return Rank.FLUSH;
-  } else if (isStraight(cardsSortedByValue)) {
+  }
+  if (isStraight(cardsSortedByValue)) {
     return Rank.STRAIGHT;
-  } else if (isThreeOfaKind(cardsSortedByValue)) {
+  }
+  if (isThreeOfaKind(sortedGroupsByLength)) {
     return Rank.THREE_OF_KIND;
-  } else if (isTwoPairs(cardsSortedByValue)) {
+  }
+  if (isTwoPairs(sortedGroupsByLength)) {
     return Rank.TWO_PAIRS;
-  } else if (getHighestCard(cardsSortedByValue)) {
-    return Rank.HIGH_CARD;
+  }
+  if (isPair(sortedGroupsByLength)) {
+    return Rank.PAIR;
+  }
+  if (isFlush(cardsSortedBySuit)) {
+    return Rank.FLUSH;
   }
   return Rank.HIGH_CARD;
 };
