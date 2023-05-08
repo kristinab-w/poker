@@ -49,30 +49,20 @@ const isFlush = (cardsSortedBySuit: Record<CardSuit, Card[]>) =>
 
 const isStraight = (cardsSortedByValue: Card[]) => {
   const first = cardsSortedByValue[0];
-  const start = VALUE_LIST.findIndex((el) => el === first.value);
-  if (start === -1) {
-    return false;
-  }
-  // handle A as starting point
-  let timesMatchesPlace = 0;
-  if (start === VALUE_LIST.length - 1) {
-    timesMatchesPlace = 1;
-    for (let i = 1; i < 5; i++) {
-      if (cardsSortedByValue[i].value === VALUE_LIST[i - 1]) {
-        timesMatchesPlace += 1;
-      }
-    }
-  }
+  const startIndex = VALUE_LIST.findIndex((el) => el === first.value);
 
-  for (let i = 0; i < 5; i++) {
-    if (cardsSortedByValue[i].value === VALUE_LIST[start + i]) {
-      timesMatchesPlace += 1;
-    }
-  }
-  if (timesMatchesPlace === 5) {
+  const timesMatchesPlace = cardsSortedByValue.reduce((acc, card, index) => {
+    return card.value === VALUE_LIST[startIndex + index] ? acc + 1 : acc;
+  }, 0);
+
+  if (
+    timesMatchesPlace === 4 &&
+    startIndex === 0 &&
+    cardsSortedByValue[4].value === VALUE_LIST[VALUE_LIST.length - 1]
+  ) {
     return true;
   }
-  return false;
+  return timesMatchesPlace === 5;
 };
 
 const isThreeOfaKind = (sortedGroups: Card[][]) => sortedGroups[0].length === 3;
