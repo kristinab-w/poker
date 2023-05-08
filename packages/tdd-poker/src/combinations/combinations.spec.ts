@@ -1,8 +1,8 @@
 import { Card } from '../types';
-import { comparatorForTwoHands } from '../comparator';
+import { comparatorForTwoHands } from '../sorting/comparator';
 import { testCaseList } from './test-constants';
 import { TestCase } from '../test-types';
-import { getHighestCard } from '../combinations';
+import { getHighestCard } from './combinations';
 
 describe('combinations', () => {
   describe('comparatorForTwoHands', () => {

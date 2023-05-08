@@ -5,7 +5,7 @@ import {
   stringToCardList,
   stringArrToCardList,
   findGroupsWithTheSameValue,
-} from '../utils';
+} from './utils';
 import { cards, sortedCards, groupedCards } from './test-constants';
 
 describe('utils', () => {

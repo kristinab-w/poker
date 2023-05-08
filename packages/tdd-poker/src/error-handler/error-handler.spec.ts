@@ -1,4 +1,4 @@
-import { errorHandler } from '../error-handler';
+import { errorHandler } from './error-handler';
 
 describe('errorHandler', () => {
   let logSpy = jest.spyOn(global.console, 'log');

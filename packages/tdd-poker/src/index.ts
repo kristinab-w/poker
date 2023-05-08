@@ -1,5 +1,5 @@
-import { comparatorForTwoHands } from './comparator';
-import { errorHandler } from './error-handler';
+import { comparatorForTwoHands } from './sorting/comparator';
+import { errorHandler } from './error-handler/error-handler';
 
 export default function comparePokerHands(hands: string[]): -1 | 0 | 1 | void {
   try {

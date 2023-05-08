@@ -1,5 +1,5 @@
-import { VALUE_LIST } from './constants';
-import { Card, CardSuit, CardValue } from './types';
+import { VALUE_LIST } from '../constants';
+import { Card, CardSuit, CardValue } from '../types';
 
 export const sortByValue = (cardList: Card[]) => {
   return [...cardList].sort((a, b) => {

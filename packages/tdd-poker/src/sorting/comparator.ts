@@ -1,7 +1,7 @@
-import { findRank } from './combinations';
-import { RANKS_REQUIRE_HIGH_CARD_CHECK, VALUE_LIST } from './constants';
-import { Card } from './types';
-import { sortByValue, stringToCardList } from './utils';
+import { findRank } from '../combinations/combinations';
+import { RANKS_REQUIRE_HIGH_CARD_CHECK, VALUE_LIST } from '../constants';
+import { Card } from '../types';
+import { sortByValue, stringToCardList } from '../utils/utils';
 
 const compareTwoHighCards = (firstHigh: Card, secHigh: Card): -1 | 0 | 1 => {
   const first = VALUE_LIST.indexOf(firstHigh.value);

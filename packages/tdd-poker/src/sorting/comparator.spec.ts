@@ -1,4 +1,4 @@
-import { comparatorForTwoHands } from '../comparator';
+import { comparatorForTwoHands } from './comparator';
 
 describe('comparePokerHands', () => {
   it('should return -1 when sec hand rank is higher than first hand rank', () => {

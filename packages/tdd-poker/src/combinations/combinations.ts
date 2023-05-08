@@ -1,6 +1,10 @@
-import { VALUE_LIST } from './constants';
-import { Card, CardSuit, Rank } from './types';
-import { findGroupsWithTheSameValue, groupSuits, sortByValue } from './utils';
+import { VALUE_LIST } from '../constants';
+import { Card, CardSuit, Rank } from '../types';
+import {
+  findGroupsWithTheSameValue,
+  groupSuits,
+  sortByValue,
+} from '../utils/utils';
 
 const isNumberOfAKind = (
   sortedAndGroupedHand: Record<CardSuit, Card[]>,
