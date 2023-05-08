@@ -30,19 +30,15 @@ describe('utils', () => {
     });
 
     it('should throw error when card is invalid', () => {
-      try {
+      expect(() => {
         stringToCardList('AS 2S 2D PP 6D');
-      } catch (e) {
-        expect(e.message).toBe('Invalid card format.');
-      }
+      }).toThrowError('Invalid card format.');
     });
 
     it('should throw error when card number is invalid', () => {
-      try {
+      expect(() => {
         stringToCardList('AS 2S 2D 6D');
-      } catch (e) {
-        expect(e.message).toBe('Invalid card number in hand.');
-      }
+      }).toThrowError('Invalid card number in hand.');
     });
   });
 
@@ -53,11 +49,9 @@ describe('utils', () => {
     });
 
     it('should throw error when card is invalid', () => {
-      try {
+      expect(() => {
         stringArrToCardList(['AS', '2S', '2D', 'PP', '6D']);
-      } catch (e) {
-        expect(e.message).toBe('Invalid card format.');
-      }
+      }).toThrowError('Invalid card format.');
     });
   });
 
