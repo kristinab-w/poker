@@ -1,4 +1,5 @@
 import { comparatorForTwoHands } from './comparator';
+import { errorHandler } from './error-handler';
 
 export default function comparePokerHands(hands: string[]): -1 | 0 | 1 | void {
   try {
@@ -6,8 +7,7 @@ export default function comparePokerHands(hands: string[]): -1 | 0 | 1 | void {
       throw new Error('Invalid hand number.');
     }
     return comparatorForTwoHands(hands);
-  } catch (e) {
-    const error = e as Error;
-    console.log(error.message);
+  } catch (error) {
+    errorHandler(error);
   }
 }
